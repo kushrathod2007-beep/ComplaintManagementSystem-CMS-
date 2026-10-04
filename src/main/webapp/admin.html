@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>All Complaints | CMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #e0e6f1;
+      --ink: #1f2937;
+      --muted: #7a869a;
+      --blue: #3a66e0;
+      --blue-dark: #2d55cc;
+      --green: #2fb36d;
+      --yellow: #b7791f;
+      --shadow-dark: rgba(163, 177, 198, .6);
+      --shadow-light: rgba(255, 255, 255, .85);
+      --raised: 8px 8px 18px var(--shadow-dark), -8px -8px 18px var(--shadow-light);
+      --raised-sm: 4px 4px 10px var(--shadow-dark), -4px -4px 10px var(--shadow-light);
+      --inset: inset 4px 4px 9px var(--shadow-dark), inset -4px -4px 9px var(--shadow-light);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      line-height: 1.5;
+    }
+
+    .topbar {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 24px 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; }
+
+    .logo {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: var(--bg); box-shadow: var(--raised-sm);
+      display: grid; place-items: center; color: var(--blue); font-weight: 800;
+    }
+
+    .pill-link {
+      text-decoration: none; color: var(--blue); font-weight: 600; font-size: .9rem;
+      padding: 10px 20px; border-radius: 999px; background: var(--bg);
+      box-shadow: var(--raised-sm); border: 0; cursor: pointer;
+    }
+    .pill-link:hover { box-shadow: var(--inset); }
+
+    .wrap { max-width: 1300px; margin: 0 auto; padding: 32px 24px 56px; }
+
+    h1 { font-size: clamp(2rem, 4vw, 3rem); margin: 0 0 10px; }
+    h1 em { font-style: normal; color: var(--blue); display: block; }
+    .lead { color: var(--muted); margin: 0 0 28px; }
+
+    .card { background: var(--bg); border-radius: 24px; box-shadow: var(--raised); padding: 28px; }
+    .card h2 { font-size: 1.1rem; margin: 0 0 4px; }
+    .card .sub { color: var(--muted); font-size: .9rem; margin: 0 0 20px; }
+
+    select {
+      width: 100%; font: inherit; font-size: .85rem; color: var(--ink);
+      border: 0; border-radius: 10px; padding: 8px 10px; background: var(--bg); box-shadow: var(--inset);
+    }
+
+    .assign-btn {
+      margin-top: 6px; padding: 5px 10px; font-size: 0.75rem; font-weight: 600;
+      color: #fff; border: 0; border-radius: 8px; cursor: pointer; background: var(--blue); box-shadow: var(--raised-sm);
+    }
+    .assign-btn:hover { background: var(--blue-dark); }
+
+    .charts-grid {
+      display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-bottom: 28px;
+    }
+    .chart-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0 10px; font-size: .9rem; }
+    th { text-align: left; font-size: .7rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding: 0 14px 4px; }
+    td { padding: 14px; background: var(--bg); box-shadow: var(--raised-sm); vertical-align: middle; }
+    td:first-child { border-radius: 14px 0 0 14px; }
+    td:last-child { border-radius: 0 14px 14px 0; }
+
+    .id { color: var(--muted); font-weight: 600; white-space: nowrap; }
+    .chip { display: inline-block; padding: 5px 12px; border-radius: 999px; font-size: .78rem; font-weight: 700; background: var(--bg); box-shadow: var(--inset); }
+    .Pending { color: var(--yellow); }
+    .In-Progress { color: var(--blue); }
+    .Resolved { color: var(--green); }
+
+    .empty { text-align: center; color: var(--muted); padding: 32px 10px; box-shadow: none; }
+
+    #toast {
+      position: fixed; right: 24px; bottom: 24px; padding: 14px 22px; border-radius: 16px;
+      background: var(--bg); color: var(--ink); box-shadow: var(--raised); font-size: .9rem;
+      opacity: 0; transform: translateY(8px); transition: opacity .2s, transform .2s; pointer-events: none; z-index: 50;
+    }
+    #toast.show { opacity: 1; transform: none; }
+
+    .summary { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 28px; }
+    .count { background: var(--bg); border-radius: 20px; box-shadow: var(--raised-sm); padding: 18px 22px; }
+    .count b { display: block; font-size: 1.9rem; line-height: 1.1; }
+    .count span { font-size: .7rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+    :root[data-theme="dark"] {
+      --bg: #1d2230; --ink: #e6eaf2; --muted: #8b95a9;
+      --blue: #6b8ff7; --green: #3ccf84; --yellow: #e8b04a;
+      --shadow-dark: rgba(0, 0, 0, .55); --shadow-light: rgba(255, 255, 255, .05);
+    }
+    .actions { display: flex; align-items: center; gap: 12px; }
+  </style>
+  <script>try { var t = localStorage.getItem("cms-theme"); if (t) document.documentElement.setAttribute("data-theme", t); } catch (e) { }</script>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">CMS</div><span>Complaint Management</span>
+    </div>
+    <div class="actions">
+      <button type="button" class="pill-link" id="themeToggle">Dark mode</button>
+      <a class="pill-link" href="/api/logout">Log out</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <h1>Admin oversight,<em>track staff progress.</em></h1>
+    <p class="lead">Assign complaints to staff members and monitor real-time completion status.</p>
+
+    <div class="summary" id="summary"></div>
+
+    <div class="charts-grid">
+      <div class="card chart-container">
+        <h2 style="width:100%; text-align:left; margin-bottom: 16px;">Status Overview</h2>
+        <div style="width: 100%; max-width: 250px;"><canvas id="statusPieChart"></canvas></div>
+      </div>
+      <div class="card chart-container">
+        <h2 style="width:100%; text-align:left; margin-bottom: 16px;">Volume by Category</h2>
+        <div style="width: 100%; height: 250px;"><canvas id="categoryBarChart"></canvas></div>
+      </div>
+    </div>
+
+    <section class="card">
+      <h2>Complaint queue & Staff tracking</h2>
+      <p class="sub">Check completion status updated by staff members.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Current Status</th>
+              <th>Assign / Reassign Staff</th>
+              <th>Admin Override</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    let pieChartInstance = null;
+    let barChartInstance = null;
+    let staffCache = [];
+
+    function esc(s) {
+      return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    function toast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg; t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2800);
+    }
+
+    async function fetchStaffList() {
+      try {
+        const res = await fetch("/api/get-staff", { cache: "no-store" });
+        if (res.ok) staffCache = await res.json();
+      } catch (e) {
+        console.error("Could not fetch staff members", e);
+      }
+    }
+
+    function renderCharts(statusData, categoryData) {
+      const css = (varName) => getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+      const pieCtx = document.getElementById('statusPieChart').getContext('2d');
+      if (pieChartInstance) pieChartInstance.destroy();
+      const statusLabels = ["Pending", "In Progress", "Resolved"];
+      const statusValues = statusLabels.map(label => statusData[label] || 0);
+
+      pieChartInstance = new Chart(pieCtx, {
+        type: 'doughnut',
+        data: {
+          labels: statusLabels,
+          datasets: [{ data: statusValues, backgroundColor: [css('--yellow'), css('--blue'), css('--green')], borderWidth: 0 }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: css('--ink') } } } }
+      });
+
+      const barCtx = document.getElementById('categoryBarChart').getContext('2d');
+      if (barChartInstance) barChartInstance.destroy();
+
+      barChartInstance = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(categoryData),
+          datasets: [{ label: 'Complaints', data: Object.values(categoryData), backgroundColor: css('--blue'), borderRadius: 6 }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1, color: css('--muted') } },
+            x: { ticks: { color: css('--ink') }, grid: { display: false } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    async function load() {
+      await fetchStaffList();
+
+      fetch("/api/get-complaints", { cache: "no-store" })
+        .then(res => { if (res.status === 401) { window.location.href = "index.html"; return null; } return res.json(); })
+        .then(data => {
+          if (!data) return;
+
+          const statusTally = { "Pending": 0, "In Progress": 0, "Resolved": 0 };
+          const categoryTally = {};
+
+          data.forEach(c => {
+            if (c.status in statusTally) statusTally[c.status]++;
+            categoryTally[c.category] = (categoryTally[c.category] || 0) + 1;
+          });
+
+          document.getElementById("summary").innerHTML =
+            '<div class="count"><b>' + data.length + '</b><span>Total</span></div>' +
+            Object.keys(statusTally).map(k => '<div class="count"><b>' + statusTally[k] + '</b><span>' + k + '</span></div>').join("");
+
+          renderCharts(statusTally, categoryTally);
+
+          const body = document.getElementById("adminTableBody");
+          if (data.length === 0) {
+            body.innerHTML = '<tr><td colspan="6" class="empty">No complaints submitted yet.</td></tr>';
+            return;
+          }
+
+          body.innerHTML = data.map(c => {
+            const compId = c.id || c.complaintId || c.complaint_id || 'N/A';
+            const currentAssigned = c.assignedTo || c.assigned_to || '';
+
+            const staffOpts = ['<option value="">-- Unassigned --</option>']
+              .concat(staffCache.map(st => 
+                '<option value="' + st.id + '"' + (String(st.id) === String(currentAssigned) ? ' selected' : '') + '>' + esc(st.fullName) + '</option>'
+              )).join("");
+
+            const statusOpts = ["Pending", "In Progress", "Resolved"].map(s =>
+              '<option value="' + s + '"' + (s === c.status ? " selected" : "") + '>' + s + '</option>').join("");
+
+            return '<tr>' +
+              '<td class="id">' + esc(compId) + '</td>' +
+              '<td>' + esc(c.title) + '</td>' +
+              '<td>' + esc(c.category) + '</td>' +
+              '<td><span class="chip ' + esc(String(c.status).replace(/\s+/g, "-")) + '">' + esc(c.status) + '</span></td>' +
+              '<td>' +
+                '<select class="staff-select" data-id="' + esc(compId) + '">' + staffOpts + '</select>' +
+                '<button type="button" class="assign-btn" onclick="assignTask(\'' + esc(compId) + '\')">Assign</button>' +
+              '</td>' +
+              '<td><select data-id="' + esc(compId) + '" class="status-select">' + statusOpts + '</select></td>' +
+              '</tr>';
+          }).join("");
+        })
+        .catch(() => toast("Could not load complaints."));
+    }
+
+    async function assignTask(compId) {
+      const selectElem = document.querySelector(`.staff-select[data-id="${compId}"]`);
+      const staffId = selectElem ? selectElem.value : "";
+
+      const params = new URLSearchParams();
+      params.append("complaintId", compId);
+      params.append("staffId", staffId);
+
+      try {
+        const res = await fetch("/api/assign-complaint", { method: "POST", body: params });
+        if (res.ok) {
+          toast("Staff assigned successfully!");
+          load();
+        } else {
+          toast("Failed to assign staff.");
+        }
+      } catch (err) {
+        toast("Network error during assignment.");
+      }
+    }
+
+    document.getElementById("adminTableBody").addEventListener("change", function (e) {
+      if (!e.target.classList.contains("status-select")) return;
+      const data = new URLSearchParams();
+      data.append("complaintId", e.target.dataset.id);
+      data.append("status", e.target.value);
+      fetch("/api/update-complaint", { method: "POST", body: data })
+        .then(res => {
+          if (res.ok) {
+            toast("Status updated to " + e.target.value);
+            load();
+          } else {
+            toast("Could not update status.");
+          }
+        });
+    });
+
+    load();
+
+    (function () {
+      const root = document.documentElement, btn = document.getElementById("themeToggle");
+      function paint() { btn.textContent = root.getAttribute("data-theme") === "dark" ? "Light mode" : "Dark mode"; }
+      btn.addEventListener("click", function () {
+        const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("cms-theme", next); } catch (e) { }
+        paint();
+        load();
+      });
+      paint();
+    })();
+  </script>
+</body>
+</html>

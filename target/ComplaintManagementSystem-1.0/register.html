@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS | Create Account</title>
+    <link rel="stylesheet" href="register.css">
+    <link rel="stylesheet" href="dark.css">
+    <script src="theme.js"></script>
+</head>
+
+<body>
+
+    <div class="background-shape shape-one"></div>
+    <div class="background-shape shape-two"></div>
+
+    <!-- HEADER -->
+    <header class="top-bar">
+        <div class="logo-area">
+            <div class="logo">C</div>
+            <div class="logo-text">
+                <h2>CMS</h2>
+                <span>COMPLAINT MANAGEMENT SYSTEM</span>
+            </div>
+        </div>
+        <div class="system-status">
+            <span></span>
+            System Online
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="main-container">
+
+        <!-- INTRO -->
+        <div class="intro">
+            <div class="small-title">JOIN THE PLATFORM</div>
+
+            <h1>
+                Create your
+                <br>
+                <span>CMS Account.</span>
+            </h1>
+
+            <p>
+                Register once and get access to a simple,
+                transparent and organized complaint management
+                experience.
+            </p>
+
+            <!-- BENEFITS -->
+            <div class="benefits">
+                <div class="benefit">
+                    <div>✓</div>
+                    <section>
+                        <strong>Quick Registration</strong>
+                        <p>Create your account in seconds.</p>
+                    </section>
+                </div>
+
+                <div class="benefit">
+                    <div>◷</div>
+                    <section>
+                        <strong>Track Complaints</strong>
+                        <p>Monitor complaints from one platform.</p>
+                    </section>
+                </div>
+
+                <div class="benefit">
+                    <div>◆</div>
+                    <section>
+                        <strong>Secure Access</strong>
+                        <p>Role-based access for every user.</p>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- REGISTER CARD -->
+        <div class="register-card">
+
+            <div class="card-top">
+                <div class="card-icon">+</div>
+                <h2>Create Account</h2>
+                <p>Register for your CMS account</p>
+            </div>
+
+            <form id="registerForm">
+
+                <!-- FULL NAME -->
+                <div class="input-group">
+                    <label>FULL NAME</label>
+                    <div class="input-box">
+                        <span class="icon">◎</span>
+                        <input type="text" id="fullName" placeholder="Enter your full name" autocomplete="name">
+                    </div>
+                </div>
+
+                <!-- EMAIL -->
+                <div class="input-group">
+                    <label>EMAIL ADDRESS</label>
+                    <div class="input-box">
+                        <span class="icon">@</span>
+                        <input type="email" id="email" placeholder="Enter your email" autocomplete="email">
+                    </div>
+                </div>
+
+                <!-- ACCOUNT TYPE (Student only; Staff and Admin accounts are created by the administrator) -->
+                <div class="input-group">
+                    <label>ACCOUNT TYPE</label>
+                    <div class="roles">
+                        <button type="button" class="role active" data-role="Student">
+                            S&nbsp; Student
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="input-group">
+                    <label>PASSWORD</label>
+                    <div class="input-box">
+                        <span class="icon">●</span>
+                        <input type="password" id="password" placeholder="Create a password" autocomplete="new-password">
+                        <button type="button" id="showPassword" class="show-button">Show</button>
+                    </div>
+
+                    <!-- PASSWORD STRENGTH -->
+                    <div class="password-strength">
+                        <div class="strength-header">
+                            <span>Password Strength</span>
+                            <strong id="strengthText">—</strong>
+                        </div>
+                        <div class="strength-bar">
+                            <span id="strengthFill"></span>
+                        </div>
+
+                        <!-- PASSWORD REQUIREMENTS -->
+                        <div class="password-requirements">
+                            <span id="lengthCheck">○ 8+ characters</span>
+                            <span id="upperCheck">○ Uppercase</span>
+                            <span id="numberCheck">○ Number</span>
+                            <span id="specialCheck">○ Special character</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONFIRM PASSWORD -->
+                <div class="input-group">
+                    <label>CONFIRM PASSWORD</label>
+                    <div class="input-box">
+                        <span class="icon">●</span>
+                        <input type="password" id="confirmPassword" placeholder="Confirm your password" autocomplete="new-password">
+                    </div>
+
+                    <!-- PASSWORD MATCH -->
+                    <div id="passwordMatch" class="password-match"></div>
+                </div>
+
+                <!-- TERMS -->
+                <label class="terms">
+                    <input type="checkbox" id="terms">
+                    <span>
+                        I agree to the
+                        <a href="#">Terms & Conditions</a>
+                        and
+                        <a href="#">Privacy Policy</a>.
+                    </span>
+                </label>
+
+                <!-- REGISTER BUTTON -->
+                <button type="submit" class="register-button">
+                    <span>Create Account</span>
+                    <strong>→</strong>
+                </button>
+
+            </form>
+
+            <!-- SEPARATOR -->
+            <div class="separator">
+                <span>OR</span>
+            </div>
+
+            <!-- LOGIN LINK -->
+            <div class="login-link">
+                Already have an account?
+                <a href="index.html">Sign In →</a>
+            </div>
+
+            <!-- SECURITY -->
+            <div class="secure-box">
+                <div class="secure-icon">✓</div>
+                <div>
+                    <strong>Secure Registration</strong>
+                    <p>Your account information is protected.</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        © 2026 CMS · Complaint Management System
+    </footer>
+
+    <!-- TOAST -->
+    <div id="toast"></div>
+
+    <script src="register.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+/* Dark mode for the login and register pages.
+   Load AFTER the page's own CSS (register.css). Toggled by theme.js via <html data-theme="dark">. */
+
+/* ---------- Toggle button (both themes) ---------- */
+.theme-toggle {
+  position: fixed; left: 22px; bottom: 22px; z-index: 50;
+  padding: 11px 20px; border: 0; border-radius: 30px; cursor: pointer;
+  font: inherit; font-size: 11px; font-weight: 800; letter-spacing: .5px;
+  color: var(--blue, #3867e8); background: var(--card, #dce4ef);
+  box-shadow: 6px 6px 13px var(--shadow-dark, #b6c0cf), -6px -6px 13px var(--shadow-light, #f7faff);
+  transition: .25s;
+}
+.theme-toggle:hover { transform: translateY(-1px); }
+.theme-toggle:focus-visible { outline: 3px solid rgba(56,103,232,.4); outline-offset: 2px; }
+
+/* ---------- Dark palette (overrides the variables in register.css) ---------- */
+html[data-theme="dark"] {
+  --bg: #1d2230;
+  --card: #1f2433;
+  --text: #e6eaf2;
+  --muted: #8b95a9;
+  --blue: #6b8ff7;
+  --blue-dark: #4f74e6;
+  --shadow-dark: rgba(0, 0, 0, .55);
+  --shadow-light: rgba(255, 255, 255, .05);
+  --input: #1f2433;
+
+  --d-raised: 8px 8px 17px rgba(0,0,0,.55), -8px -8px 17px rgba(255,255,255,.05);
+  --d-raised-sm: 4px 4px 9px rgba(0,0,0,.55), -4px -4px 9px rgba(255,255,255,.05);
+  --d-inset: inset 5px 5px 11px rgba(0,0,0,.55), inset -5px -5px 11px rgba(255,255,255,.05);
+  --d-inset-sm: inset 3px 3px 7px rgba(0,0,0,.55), inset -3px -3px 7px rgba(255,255,255,.05);
+  --d-muted-2: #7a859b;
+}
+
+html[data-theme="dark"] .theme-toggle { box-shadow: var(--d-raised-sm); }
+
+/* ---------- Page ---------- */
+html[data-theme="dark"] body { background: linear-gradient(135deg, #222839, #1a1f2c); }
+
+html[data-theme="dark"] .shape-one,
+html[data-theme="dark"] .shape-two {
+  background: linear-gradient(145deg, #1a1f2c, #252b3d);
+  box-shadow: 25px 25px 60px rgba(0,0,0,.5), -25px -25px 60px rgba(255,255,255,.04);
+}
+
+/* ---------- Header ---------- */
+html[data-theme="dark"] .logo { box-shadow: var(--d-raised-sm); }
+html[data-theme="dark"] .logo-text span { color: var(--d-muted-2); }
+html[data-theme="dark"] .system-status { color: var(--muted); box-shadow: var(--d-inset-sm); }
+
+/* ---------- Intro ---------- */
+html[data-theme="dark"] .small-title { box-shadow: var(--d-inset); }
+html[data-theme="dark"] .benefit > div { box-shadow: var(--d-raised); }
+html[data-theme="dark"] .benefit p { color: var(--d-muted-2); }
+
+/* ---------- Card ---------- */
+html[data-theme="dark"] .register-card,
+html[data-theme="dark"] .login-card { box-shadow: 18px 18px 38px rgba(0,0,0,.55), -18px -18px 38px rgba(255,255,255,.05); }
+html[data-theme="dark"] .card-icon { box-shadow: var(--d-raised-sm); }
+
+html[data-theme="dark"] .input-group label { color: var(--muted); }
+
+html[data-theme="dark"] .input-box { box-shadow: var(--d-inset); }
+html[data-theme="dark"] .input-box:focus-within {
+  box-shadow: var(--d-inset-sm), 0 0 0 2px rgba(107,143,247,.28);
+}
+html[data-theme="dark"] .icon { color: var(--d-muted-2); }
+html[data-theme="dark"] .input-box input::placeholder { color: #6c7690; }
+html[data-theme="dark"] .input-box input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #1f2433 inset;
+  -webkit-text-fill-color: #e6eaf2;
+  caret-color: #e6eaf2;
+}
+
+/* account type */
+html[data-theme="dark"] .role { color: var(--muted); box-shadow: var(--d-raised-sm); }
+html[data-theme="dark"] .role.active { color: #fff; box-shadow: 6px 6px 14px rgba(0,0,0,.5), -4px -4px 10px rgba(255,255,255,.04); }
+
+/* password strength */
+html[data-theme="dark"] .strength-header span { color: var(--d-muted-2); }
+html[data-theme="dark"] .strength-bar {
+  background: #171b27;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,.6), inset -2px -2px 5px rgba(255,255,255,.04);
+}
+html[data-theme="dark"] .password-requirements span:not(.valid) { color: var(--d-muted-2); }
+
+/* terms */
+html[data-theme="dark"] .terms { color: var(--muted); }
+
+/* buttons */
+html[data-theme="dark"] .register-button { box-shadow: 8px 8px 18px rgba(0,0,0,.5), -6px -6px 14px rgba(255,255,255,.04); }
+html[data-theme="dark"] .register-button:hover { box-shadow: 10px 12px 22px rgba(0,0,0,.55), -7px -7px 16px rgba(255,255,255,.05); }
+
+/* separator, links, secure box */
+html[data-theme="dark"] .separator { color: var(--d-muted-2); }
+html[data-theme="dark"] .separator::before,
+html[data-theme="dark"] .separator::after { background: #343b50; }
+html[data-theme="dark"] .login-link { color: var(--muted); }
+html[data-theme="dark"] .secure-box { box-shadow: var(--d-inset); }
+html[data-theme="dark"] .secure-icon { box-shadow: var(--d-raised-sm); }
+html[data-theme="dark"] .secure-box p { color: var(--d-muted-2); }
+
+/* footer + toast */
+html[data-theme="dark"] footer { color: var(--d-muted-2); }
+html[data-theme="dark"] #toast { background: #262c3e; color: var(--text); box-shadow: var(--d-raised); }
+
+/* ---------- Login page extras ---------- */
+html[data-theme="dark"] .card-icon { background: var(--card); border: 0; }
+html[data-theme="dark"] .remember { color: var(--muted); }
+html[data-theme="dark"] .register-link { color: var(--muted); }
+html[data-theme="dark"] .login-button { box-shadow: 8px 8px 18px rgba(0,0,0,.5), -6px -6px 14px rgba(255,255,255,.04); }
+html[data-theme="dark"] .login-button:hover { box-shadow: 10px 12px 22px rgba(0,0,0,.55), -7px -7px 16px rgba(255,255,255,.05); }
+html[data-theme="dark"] .login-button:active { box-shadow: inset 5px 5px 10px rgba(0,0,0,.35), inset -5px -5px 10px rgba(255,255,255,.06); }
